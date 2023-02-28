@@ -1,13 +1,15 @@
+# measure_disparity.py - iAdeptive technologies
+# CLI interface included, use -h for help
+
 import configparser
 import argparse
 import pandas as pd
 import random
-from utils import mitigate_disparity_methods
 import utils.measure_disparity_methods as measure_disparity_methods
 import os
 
 random.seed(42)
-parser = argparse.ArgumentParser(description="Bias Mitigation Tool",
+parser = argparse.ArgumentParser(description="iAdeptive Bias Measurement Tool",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("settings", help = "settings.ini file")
 args = vars(parser.parse_args())

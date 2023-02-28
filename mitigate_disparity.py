@@ -1,3 +1,6 @@
+# mitigate_disparity.py - iAdeptive technologies
+# CLI interface included, use -h for help
+
 import configparser
 import argparse
 import pandas as pd
@@ -7,7 +10,7 @@ import utils.measure_disparity_methods as measure_disparity_methods
 import os
 
 random.seed(42)
-parser = argparse.ArgumentParser(description="Bias Mitigation Tool",
+parser = argparse.ArgumentParser(description="iAdeptive Bias Mitigation Tool",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("settings", help = "settings.ini file")
 parser.add_argument("-a", "-adjust", action="store_true", help = "Model Agnostic Adjustment")
@@ -25,9 +28,10 @@ def adjust_option(Config):
     proba = adjustment_data[Config['dataset information']['probability_column']]
     demo_dict = dict(zip(Config['dataset information']['demo_variables'].split(','),
                          Config['dataset information']['advantaged_groups'].split(',')))
+    granularity = float(Config['other']['debias_granularity'])
 
     reps = int(Config['other']['optimization_repetitions'])
-    adjusted = mitigate_disparity_methods.model_agnostic_adjustment(adjustment_data, y, proba, D, demo_dict, reps)
+    adjusted = mitigate_disparity_methods.model_agnostic_adjustment(adjustment_data, y, proba, D, demo_dict, reps, granularity)
     adjusted.to_csv(Config['paths']['output_path'], index = False)
 
 def fit_option(Config):
@@ -39,9 +43,8 @@ def fit_option(Config):
                          Config['dataset information']['advantaged_groups'].split(',')))
 
     db_model = mitigate_disparity_methods.debiased_model(Config)
-    reps = int(Config['other']['optimization_repetitions'])
 
-    db_model.fit(X, y, D, demo_dict, reps)
+    db_model.fit(X, y, D, demo_dict)
     print(db_model.debiased_thresholds)
 
 def predict_option(Config):
@@ -57,9 +60,7 @@ def predict_option(Config):
 
     db_model = mitigate_disparity_methods.debiased_model(Config)
 
-    reps = int(Config['other']['optimization_repetitions'])
-
-    db_model.fit(X, y, D, demo_dict, reps)
+    db_model.fit(X, y, D, demo_dict)
 
     results = db_model.predict(P, D)
     predict_data['predicted'] = results
