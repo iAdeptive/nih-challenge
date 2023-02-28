@@ -1,0 +1,18 @@
+The main technical requirement for this package is python, version 3.9 or higher.
+
+The required python dependencies for our package include:
+pandas
+plotnine
+scikit-learn
+XGBoost
+
+While we used the Anaconda distribution as a python environment, these packages can be installed standardly through 
+the pip package manager as well. Since python is designed to be platform agnostic, our tool can run on any system or 
+OS capable of running python and the required modules. 
+
+The versions used in our build of the tools are as follows:
+python                    3.9.13
+pandas                    1.4.4
+plotnine                  0.10.1
+scikit-learn              1.0.2
+xgboost                   1.7.3
