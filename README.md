@@ -1,21 +1,37 @@
-## nih-challenge
-bias detection challenge
+# Installation instructions <br>
 
-####################### <br>
-##Bias Measurement Tool <br>
-####################### <br>
-CLI tool usage: measure_disparity.py [-h] settings.ini <br>
+The code is separated into four python files, divided into two scripting files: <br>
+measure_disparity.py <br>
+mitigate_disparity.py <br>
+
+and two method files: <br>
+measure_disparity_methods.py <br>
+mitigate_disparity_methods.py <br>
+
+Make sure the two method files stay in a folder named "utils" located at the same location as the two script  <br>
+files. As long as python version 3.9 or higher and the required modules are installed then the tools will <br>
+be able to run with no problems. <br>
+
+The required python dependencies for our tools are as follows: <br>
+pandas <br>
+plotnine <br>
+scikit-learn <br>
+XGBoost <br>
+
+# Bias Measurement Tool <br>
+### CLI tool usage: 
+measure_disparity.py [-h] settings.ini <br>
 
 Settings	:	settings.ini file <br>
 -h, --help	:	show this help message and exit <br>
 
 The settings ini file for must include [dataset information], [paths], and [other]. <br>
 
-Sample CLI usages: <br>
+### Sample CLI usages: <br>
 python measure_disparity.py settings-measure.ini <br>
 python measure_disparity.py -h <br>
 
-Sample settings ini file: <br>
+### Sample settings ini file: <br>
 [dataset information] <br>
 target_variable: actual <br>
 demo_variables: RACE,GENDER,INCOME <br>
@@ -30,9 +46,11 @@ input_path: ~/data/model_results.csv <br>
 [other] <br>
 display_metrics: STP,TPR,PPV,FPR,ACC <br>
 
+### measure_disparity_methods functions
 Besides the CLI the tool can also be more directly used and customized by importing measure_disparity_methods. The <br> 
 main functions of measure_disparity_methods are described below. <br>
 
+#### __init__
 Function to intialize a measured object from measure_disparity_methods.py <br>
 measure_disparity_methods.measured(dataset, <br>
         democols, <br>
@@ -52,6 +70,7 @@ measure_disparity_methods.measured(dataset, <br>
     Returns <br>
     measured <class 'measure_disparity.measured'>: object of the class from measure_disparity.py <br>
 
+#### MetricPlots
 Function to draw a plot of any number of given metrics for a given demographic column <br>
 measured.MetricPlots(colname,  <br>
             privileged, <br>
@@ -67,6 +86,7 @@ measured.MetricPlots(colname,  <br>
     Returns <br>
     aplot <class 'plotnine.ggplot.ggplot'>: plotnine plot of the metrics and demographics chosen <br>
 
+#### RocPlots
 Function to draw two graphs of the Receiver Operating Characteristic curves for a demographic column <br>
 measured.RocPlots(colname, <br>
         draw=True, <br>
@@ -80,12 +100,14 @@ measured.RocPlots(colname, <br>
     rocgraph2 <class 'plotnine.ggplot.ggplot'>: plotnine graph of the ROC curve zoomed in on the upper left hand <br>
     quadrant <br>
 
+#### PrintMetrics
 Function to print out all chosen metrics for all chosen demographic columns in a table <br>
 measured.PrintMetrics(columnlist=[], <br>
             metrics=['STP', 'TPR', 'PPV', 'FPR', 'ACC']) <br>
     columnlist <class 'list'>: list of strings of the names of the demographic columns to print metrics for <br>
     metrics <class 'list'>: list of shorthand names of the metrics to print out <br>
 
+#### PrintRatios
 Function to calculate the ratio of metric values for one demographic column <br>
 measured.PrintRatios(colname,  <br>
             privileged, <br>
@@ -98,6 +120,7 @@ measured.PrintRatios(colname,  <br>
     Returns <br>
     metricsdf <class 'pandas.core.frame.DataFrame'>: table of the ratios calculated <br>
 
+#### fullnames
 measure_disparity_methods.measured also has a class variable fullnames which is a dictionary wherein the <br>
 shorthand names are the keys and the full length names of the metrics are the values <br>
 fullnames = { <br>
@@ -115,12 +138,9 @@ fullnames = { <br>
         'FS': 'F1 Score' <br>
     } <br>
 
-###################### <br>
-##Bias Mitigation Tool <br>
-###################### <br>
-CLI tool usage: Sample input for mitigate_disparity.py:  <br>
-
-usage: mitigate_disparity.py [-h] [-a] [-f] [-p] settings.ini  <br>
+# Bias Mitigation Tool <br>
+### CLI tool usage: 
+mitigate_disparity.py [-h] [-a] [-f] [-p] settings.ini  <br>
 
 Settings	:	settings.ini file  <br>
 -h, --help	:	show this help message and exit  <br>
@@ -132,13 +152,13 @@ The settings ini file for -a option must include [dataset information], [paths],
 file for the options -f and -p must include [model settings] and [model arguments] in addition to [dataset  <br>
 information], [paths], and [other]. <br>
 
-Sample CLI usages: <br>
+### Sample CLI usages: <br>
 python mitigate_disparity.py -a settings-agnostic.ini <br>
 python mitigate_disparity.py -f settings-model.ini <br>
 python mitigate_disparity.py -p settings-model.ini <br>
 python mitigate_disparity.py -h <br>
 
-Sample settings ini file: <br>
+### Sample settings ini file: <br>
 [model settings] <br>
 model_module: xgboost <br>
 model_class: XGBClassifier <br>
@@ -170,9 +190,11 @@ output_path: debiased_predicted_dataset.csv <br>
 optimization_repetitions: 2 <br>
 display_metrics: STP,TPR,PPV,FPR,ACC <br>
 
+### mitigate_disparity_methods functions
 Besides the CLI the tool can also be more directly used and customized by importing mitigate_disparity_methods.  <br>
 The main functions of mitigate_disparity_methods are described below. <br>
 
+#### model_agnostic_adjustment
 model_agnostic_adjustment(modeling_dataset,  <br>
                             y,  <br>
                             proba,  <br>
@@ -190,10 +212,12 @@ model_agnostic_adjustment(modeling_dataset,  <br>
     output <class 'pandas.core.frame.DataFrame'>: data from another model but with new debiased predictions added <br>
     under the column "debiased_prediction" <br>
 
+#### __init__
 mitigate_disparity_methods.debiased_model(config) <br>
     config <class 'configparser.ConfigParser'>: object with all the configuration settings to initialize an <br>
     object of the debiased_model class <br>
 
+#### fit
 debiased_model.fit(X,  <br>
                     y,  <br>
                     D,  <br>
@@ -210,6 +234,7 @@ debiased_model.fit(X,  <br>
     thresholds args, kwargs: any number of arguments to be passed through from [model settings] and [model <br>
     arguments] to whatever chosen module the users wishes to use for their machine learning model <br>
 
+#### predict
 debiased_model.predict(X,  <br>
                         D) <br>
     X <class 'pandas.core.frame.DataFrame'>: data of the various input variables used to train the model <br>
@@ -218,6 +243,7 @@ debiased_model.predict(X,  <br>
     prediction_df <class 'pandas.core.frame.DataFrame'>: dataframe of just one column containing the new <br>
     predicted values for each observation <br>
 
+#### get_debiased_thresholds
 debiased_model.get_debiased_thresholds() <br>
     Returns <br>
     debiased_thresholds <class 'pandas.core.frame.DataFrame'>: new cutoff thresholds calculated to be debiased <br>
