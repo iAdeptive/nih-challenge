@@ -1,8 +1,8 @@
 # iAdeptive AI/ML Bias Detection and Mitigation Tool ReadMe
 
-## Installation instructions <br>
+## Implementation Instructions <br>
 
-The code is separated into four python files, divided into two scripting files:
+To run our code first of all notice how the code is separated into four python files, divided into two scripting files:
 - measure_disparity.py
 - mitigate_disparity.py
 
@@ -10,14 +10,29 @@ and two method files:
 - measure_disparity_methods.py
 - mitigate_disparity_methods.py
 
-Make sure the two method files stay in a folder named "utils" located at the same location as the two script files. As long as python version 3.9 or higher and the required modules are installed then the tools will be able to run with no problems. <br>
+Make sure the two method files stay in a folder named "utils" located at the same location as the two script files. <br>
+Then make sure that python version 3.9 or higher and the required modules are installed so that the tools can run with no problems. <br>
 
 The required python dependencies for our tools are as follows:
 - pandas 1.4.4
-- plotnine 0.10.1 
+- plotnine 0.10.1
 - scikit-learn 1.0.2
 
-# Settings.ini files
+With all the required files and dependencies in place the user may begin to use this tool. <br>
+For example when running from the command line, a settings ini file must first be set up, in a similar fashion to one of the three sample ini files provided. <br>
+Once an appropriate ini file is made, the measure disparity tool could then be run like this:
+```
+python measure_disparity.py settings-measure.ini
+```
+
+Likewise the mitigate disparity tool could then be run like this:
+```
+python mitigate_disparity.py -p settings-model.ini
+```
+
+Both of these CLI commands will output tables in the terminal, as well as save graphs to a folder /graphs in your current workspace.
+
+# Settings.ini Files
 Three sample ini files are included, settings-measure.ini, settings-model.ini, and settings-agnostic.ini. Example usage is explained in the relevant sections. Below are descriptions for the various settings available in the INI file:
 
 ##### [dataset information]
@@ -286,7 +301,6 @@ output <class 'pandas.core.frame.DataFrame'>: data from another model but with n
 ##### \_\_init\_\_ 
 Function to intialize a debiased model object from mitgate_disparity_methods.py <br>
 
-##### __init__
 *Arguments* <br>
  config <class 'configparser.ConfigParser'>: object with all the configuration settings to initialize an object of the debiased_model class <br>
 
