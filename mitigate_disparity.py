@@ -74,13 +74,13 @@ def predict_option(Config):
                                       probabilitycol=Config['dataset information']['probability_column'],
                                       weightscol = Config['dataset information']['weight_column'])
     
-    if not os.path.exists("graphs"):
-        os.makedirs("graphs")
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs")
 
     for key, value in demo_dict.items():
         ratio_df = demos.PrintRatios(key, value, printout=True)
         plot1 = demos.MetricPlots(key, value, draw=True)
-        plot1.save('graphs/' + str(key) + '_disparity.png')
+        plot1.save('outputs/' + str(key) + '_mitigate_disparity.png')
 
 if ('a' in args) and (args['a'] == True):
     adjust_option(Config)

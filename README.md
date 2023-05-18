@@ -17,6 +17,7 @@ The required python dependencies for our tools are as follows:
 - pandas 1.4.4
 - plotnine 0.10.1
 - scikit-learn 1.0.2
+- xgboost 1.7.3
 
 With all the required files and dependencies in place the user may begin to use this tool. <br>
 For example when running from the command line, a settings ini file must first be set up, in a similar fashion to one of the three sample ini files provided. <br>
@@ -30,8 +31,24 @@ Likewise the mitigate disparity tool could then be run like this:
 python mitigate_disparity.py -p settings-model.ini
 ```
 
-Both of these CLI commands will output tables in the terminal, as well as save graphs to a folder /graphs in your current workspace.
+Both of these CLI commands will output tables in the terminal, as well as save graphs to a folder /outputs in your current workspace.
 
+## To run the code as a Docker Container<br>
+### Prerequisite <br>
+- docker <br>
+### Steps <br>
+- Run the below command in the root directory to build the image <br>
+```
+docker build . -t bias-detection:1.0
+``` 
+- To run mitigate_disparity.py <br>
+```
+docker run -v $(pwd)/outputs:/app/outputs --name mitigate-bias bias-detection:1.0 python mitigate_disparity.py -p settings-model.ini
+```
+- To run measure_disparity.py <br>
+```
+docker run -v $(pwd)/outputs:/app/outputs --name measure-bias bias-detection:1.0 python measure_disparity.py settings-measure.ini
+```
 # Settings.ini Files
 Three sample ini files are included, settings-measure.ini, settings-model.ini, and settings-agnostic.ini. Example usage is explained in the relevant sections. Below are descriptions for the various settings available in the INI file:
 
@@ -157,7 +174,7 @@ predicted_column: predicted
 weight_column: n/a
 
 [paths]
-input_path: ~/data/model_results.csv
+input_path: inputs/model_results.csv
 
 [other]
 display_metrics: STP,TPR,PPV,FPR,ACC
@@ -271,9 +288,9 @@ predicted_column: predicted
 weight_column: n/a
 
 [paths]
-input_path: ~/data/modeling_dataset.csv
-predict_input_path: ~/data/modeling_dataset.csv
-output_path: debiased_predicted_dataset.csv
+input_path: inputs/modeling_dataset.csv
+predict_input_path: inputs/modeling_dataset.csv
+output_path: outputs/debiased_predicted_dataset.csv
 
 [other]
 optimization_repetitions: 10

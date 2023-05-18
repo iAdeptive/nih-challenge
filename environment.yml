@@ -1,0 +1,12 @@
+name: bias-detection
+channels:
+  - defaults
+  - pickle
+  - nltk
+  - conda-forge
+dependencies:
+  - pandas=1.4.4
+  - plotnine=0.10.1
+  - python=3.9.16
+  - xgboost=1.7.3
+  - scikit-learn==1.2.2

@@ -28,8 +28,8 @@ def measure(Config):
                                       actualcol=Config['dataset information']['target_variable'], 
                                       probabilitycol=Config['dataset information']['probability_column'],
                                       weightscol = Config['dataset information']['weight_column'])
-    if not os.path.exists("graphs"):
-        os.makedirs("graphs")
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs")
 
     for key, value in demo_dict.items():
         print("-------")
@@ -37,6 +37,6 @@ def measure(Config):
         print("-------")
         ratio_df = demos.PrintRatios(key, value, metrics= metrics_list, printout=True)
         plot1 = demos.MetricPlots(key, value, metrics = metrics_list, draw=True)
-        plot1.save('graphs/' + str(key) + '_disparity.png')
+        plot1.save('outputs/' + str(key) + '_measure_disparity.png')
 
 measure(Config)
